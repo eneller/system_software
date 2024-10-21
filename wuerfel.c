@@ -10,12 +10,14 @@ int main() {
    // Zufallszahlengenerator mit aktueller Zeit initialisieren
    srand(time(NULL) ^ getpid());
 
-   float sum =0;
+   int sum =0;
    int wuerfel;
    for (int i = 1; i <= repetitions; i++){
       wuerfel = rand() % 6 +1;
       sum = sum + wuerfel;
       printf("Würfel Nr. %d zeigt %d\n", i, wuerfel);
    }
-   printf("Durchschnittswert über %d Würfe ist %f\n", repetitions, sum/repetitions);
+   printf("Würfe: %d\n", repetitions);
+   printf("Summe: %d\n", sum);
+   printf("Durchschnittswert: %f\n", (float)sum/repetitions);
 }
