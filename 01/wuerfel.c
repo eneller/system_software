@@ -4,9 +4,15 @@
 #include <unistd.h>
 
 int main() {
-   int repetitions = 3;
+   int repetitions;
    printf("Wie oft soll gewürfelt werden?\n");
-   scanf("%d", &repetitions);
+   switch(scanf("%d", &repetitions)){
+      case EOF:
+         printf("Failed");
+         break;
+      case 1: break;// the expected value
+      default: printf("Could not read integer");
+   }
    // Zufallszahlengenerator mit aktueller Zeit initialisieren
    srand(time(NULL) ^ getpid());
 
