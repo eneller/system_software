@@ -17,7 +17,7 @@ Statt dem modernen Modulkonzept `import` verwendet C (und seine Derivate) einen 
 Mit `gcc -E` kann dessen Ausgabe analysiert werden.
 ```c
 #define abc=ABCDEFGHIJKLMNOPQRSTUVWXYZ // string replace
-#include <stdio.h> // include header file by pasting it here, <> for system files, "" for local path
+#include <stdio.h> // include header file by pasting it here, <> for system files, "" for relative path
 ```
 
 ## Aufbau einfacher C-Programme
