@@ -1,4 +1,5 @@
 # Format Specifiers
+![format specifiers](./format.png)
 ## Number Prefixes
 | **Prefix** | **Base** | **Example** | **Supported Since** |
 |------------|---------|-------------|----------------------|
