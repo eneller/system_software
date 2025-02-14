@@ -36,6 +36,7 @@ Im Gegensatz zu `puts` fügt `printf` keinen impliziten Zeilenumbruch an und unt
 - %s string
 - %f float dezimal komma
 - %e float dezimal exponential
+- %zu size_t (aus `sizeof()`)
 
 ![format](Probeklausur/format.png)
 
@@ -62,7 +63,14 @@ gcc -o output \
 Signed (vorzeichenbehaftete) ganze Zahlen werden heute durch das b-Komplement dargestellt (2-Komplement), da so keine Unterscheidung zwischen signed und unsigned Addition notwendig ist.
 Aus der Perspektive des Speichers wird hier vom ursprünglichen Intervall $[0, 2^n-1]$ für unsigned das Intervall $[2^{n-1}, 2^n-1]$ reserviert(also MSB =1).
 
-## Arithmetische Operationen
+## Enumeration
+```c
+enum Level {
+  LOW = 25, //oder ohne explizite Definition, dann implizit 0..2
+  MEDIUM = 50,
+  HIGH = 75
+};
+```
 
 ## Auswahl, Risiken, Überläufe
 Überläufe können bei allen Operationen auftreten, irrelevant ob signed oder unsigned.
@@ -92,19 +100,93 @@ Längen sind s=1,e=8,m=23 (float) und s=1,e=11,m=52 (double/long float), eventue
 - aus `<math.h>`:
 
 ![float](Probeklausur/float.png)
-# [ ][ ]4:Arrays und Zeigerarithmetik
+# [x][ ]4:Arrays und Zeigerarithmetik
 Größe eines Datentyps `sizeof()` ist immer vielfaches der Ausrichtung `alignof()`, die bestimmt an welchen Adressen im Speicher ein Objekt beginnnen kann.
 Da Arrays in C kein primitiver Datentyp sind, wird bei der Übergabe an Funktionen nur ein Zeiger auf das erste Element übergeben, die Länge des Arrays geht verloren.
-Im Regelfall sollten Arrays deshalb als Zeiger auf den Array übergeben werden.
+
+```c
+int a[16];
+char hello1[] = {'G','H','I'}; // nicht null-terminiert
+printf(”%.∗s\n”, (int) sizeof(hello1), hello1);
+char hello2[] = "ABC";
+const char* hello3 = "DEF"; // nur Zeiger, kein Schreibzugriff, sizeof liefert Zeigerlänge
+```
+
+Ideale Übergabe durch:
+```c
+void foo(size_t len, int (∗a)[len]) {;}
+```
+
+## Methoden
+- `int strcmp(str, str2)` aus `<string.h>`
+- `strcpy(src, target)`
+
 
 ## VLA
 VLAs (Variable Length Arrays), deren Länge zur Laufzeit definiert wird, wurden mit C99 eingeführt, werden jedoch weder im Linux Kernel noch in C++ verwendet
 und werden gemeinhin als Fehler im Sprachstandard betrachtet. Mittels `gcc -Wvla` kann man Warnungen bei ihrer Nutzung erhalten.
-# [ ][ ]5: Verbunde und dynamische Datenstrukturen
-# [ ][ ]6: Virtueller Adressraum und Speicherverwaltung
+
+## Zeigerarithmetik
+Erlaubt sind Addition und Differenzen, solange die Zeiger vom gleichen Typ sind und die Arraygrenzen nicht verletzt werden (in das gleiche Array zeigen).
+![pointer](Probeklausur/pointer.png)
+
+## Mehrdimensionale Arrays
+Zeilenweise oder Spaltenweise in 1d reduzieren oft sinnvoll für Speicheroptimierung.
+# [x][ ]5: Verbunde und dynamische Datenstrukturen
+```c
+struct myStructure {
+  int myNum;
+  char myLetter;
+  char myString[30];
+};
+// declare type with definition and name, can also be declared inline
+// typedef struct myStruct{} myStruct;
+typedef struct myStructure myStructure;
+
+int main() {
+  // Create a structure variable and assign values to it
+  // assignment to strings works using this method but not using s1.myString, an alternative would be strcpy
+  struct myStructure s1 = {13, 'B', "Some text"};
+```
+TODO: union
+# [x][ ]6: Virtueller Adressraum und Speicherverwaltung
+aus `<stdlib.h>`:
+- `void* malloc(size_t size);`
+- `void* calloc(size_t nelem, size_t elsize);`
+- `free(void* ptr);`
+
+TODO: mmap
 # [ ][ ]7: Speicherverwaltungsalgorithmen
 # [ ][ ]8: Kommandozeilenparameter und Einbettung in die Shell
+```c
+int main(int argc, char ∗argv[]){
+
+}
+```
+TODO: exec, readline
 # [ ][ ]9: Modularisierung
+- `extern` für reine Deklaration. Außerdem kann damit eine globale Variable in den aktuellen bereich gebracht werden.
+- `static` bedeutet in C dass eine Variable nur für die aktuelle Übersetzungseinheit (Datei) sichtbar ist
+
+## Makefile
+```Makefile
+target : prerequisites
+    recipe
+```
+Vergleicht Timestamps von target und prerequsites und aktualisiert das target durch Ausführung des Recipe wenn die prerequisites neuer als das target sind.
+
+Beispiel:
+```Makefile
+main : main.o util.o def.o
+    gcc -o main.o util.o def.o
+
+main.o : main.c def.h util.h
+    gcc -c main.c
+
+util.o : util.c util.h
+
+def.o : def.c def.h
+```
 # [ ][ ]10: Dateisysteme
 # [ ][ ]11: Sichere Programmierung
 # [x][ ]12: Systemaufrufe
