@@ -10,7 +10,7 @@ int main(){
     unsigned long long n, m, result;
     n = m = 3;
     result = n;
-    for(;m>0;m--){
+    for(;m>1;m--){
         result *=n;
     }
     printf("%llu\n", result);

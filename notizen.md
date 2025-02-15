@@ -187,6 +187,23 @@ util.o : util.c util.h
 
 def.o : def.c def.h
 ```
+
+## Preprocessor
+```c
+//sog. include guard um Mehrfach-Inklusionen zu vermeiden, wird üblicherweise vom Dateinamen abgeleitet
+#ifndef HEADER_H
+#define HEADER_H
+
+
+#endif
+```
+Alternativ existieren auch noch nicht-standardiserte Alternativen, namentlich
+`#pragma once` verwendet werden, das allerdings vom absoluten Pfad abhängt (also nicht gegen duplizierte Dateien absichert),
+oder `#import` statt `#include`, das die Verantwortung nicht dem Implementierer sondern dem Nutzer der Schnittstelle überlässt.
+
+Module können mittels Schnittstellen die in `<dlfcn.h>` definiert sind auch dynamisch nachgeladen werden. TODO
+
+## Objekt-orientierte Techniken
 # [ ][ ]10: Dateisysteme
 # [ ][ ]11: Sichere Programmierung
 # [x][ ]12: Systemaufrufe

@@ -6,4 +6,4 @@ CFLAGS = -Wall -Wextra -O2 -std=c11 -g -Wvla
 	$(CC) $(CFLAGS) -o $@ $<
 	
 clean: 
-	git clean
+	git clean -fX
